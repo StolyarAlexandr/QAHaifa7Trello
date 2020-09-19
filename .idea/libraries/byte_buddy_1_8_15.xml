@@ -1,0 +1,17 @@
+<component name="libraryTable">
+  <library name="byte-buddy-1.8.15">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/LIB/byte-buddy-1.8.15.jar!/" />
+      <root url="jar://$PROJECT_DIR$/LIB/testng-6.14.3.jar!/" />
+      <root url="jar://$PROJECT_DIR$/LIB/okio-1.14.0.jar!/" />
+      <root url="jar://$PROJECT_DIR$/LIB/okhttp-3.11.0.jar!/" />
+      <root url="jar://$PROJECT_DIR$/LIB/guava-25.0-jre.jar!/" />
+      <root url="jar://$PROJECT_DIR$/LIB/commons-exec-1.3.jar!/" />
+      <root url="jar://$PROJECT_DIR$/LIB/client-combined-3.141.59.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES>
+      <root url="jar://$PROJECT_DIR$/LIB/client-combined-3.141.59-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>
