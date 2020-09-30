@@ -7,6 +7,7 @@ import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
+import org.testng.Assert;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
@@ -25,8 +26,8 @@ public class LoginTests extends TestBase{
     @Test
     public void loginNegativeLoginEmpty() throws InterruptedException {
            // Enter empty login and password
-        WebElement passwordField = driver.findElement(By.id("password"));
         waitUntilElementIsClickable(By.id("password"),15);
+        WebElement passwordField = driver.findElement(By.id("password"));
         passwordField.click();
         passwordField.clear();
         passwordField.sendKeys("pupkin");
@@ -38,10 +39,9 @@ public class LoginTests extends TestBase{
              //Print error massage
         System.out.println("Error: " + driver
                 .findElement(By.id("error")).getText());
-
+        Assert.assertEquals("Missing email", driver.findElement(By.id("error")).getText(),"Missing email");
 
     }
-
 
     @Test
     public void loginNegativeLoginIncorrect() throws InterruptedException {
@@ -57,15 +57,15 @@ public class LoginTests extends TestBase{
         passwordField.sendKeys("pupkin");
 
              //Press login button
-        waitUntilElementIsClickable(By.id("login"),10);
+        Thread.sleep(2000);
         WebElement loginButton = driver.findElement(By.id("login"));
         loginButton.click();
-        //waitUntilElementIsPresent(By.xpath("//div[@id='error']//p[@class='error-message']"),30);
-        Thread.sleep(5000);
+        waitUntilElementsAreVisible(By.id("error"),3000);
+        Thread.sleep(2000);
 
              //Print error message
        System.out.println("Error: "+ driver
-                .findElement(By.xpath("//div[@id='error']//p[@class='error-message']")).getText());
+                .findElement(By.id("error")).getText());
 
 
     }
@@ -122,9 +122,10 @@ public class LoginTests extends TestBase{
         driver.findElement(By.id("login-submit")).click();
 
         waitUntilElementIsClickable(By.xpath("//button[@data-test-id ='header-boards-menu-button']"),45);
-        System.out.println("Boards button text: "+ driver
-                .findElement(By.xpath("//button[@data-test-id = 'header-boards-menu-button']")).getText());
+        //System.out.println("Boards button text: "+ driver
+              //  .findElement(By.xpath("//button[@data-test-id = 'header-boards-menu-button']")).getText());
 
+        Assert.assertTrue(driver.findElement(By.xpath("//button[@data-test-id = 'header-boards-menu-button']")).getText().equals("Boards"));
     }
 
 }
