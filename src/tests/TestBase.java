@@ -27,6 +27,7 @@ public class TestBase {
 
 
     }
+
    @AfterMethod
     public void tearDown(){
         driver.quit();
@@ -48,6 +49,14 @@ public class TestBase {
         }
     }
 
+    public void waitUntilElementIsVisible(By locator, int time) {
+        try {
+            new WebDriverWait(driver,time).until(ExpectedConditions.visibilityOfElementLocated(locator));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
     public void waitUntilElementIsInvisible(By locator, int time) {
         try {
             new WebDriverWait(driver,time).until(ExpectedConditions.invisibilityOfElementLocated(locator));
@@ -55,6 +64,7 @@ public class TestBase {
             e.printStackTrace();
         }
     }
+
     public void waitUntilElementsAreVisible(By locator, int time) {
         try {
             new WebDriverWait(driver,time).until(ExpectedConditions.visibilityOfAllElementsLocatedBy(locator));

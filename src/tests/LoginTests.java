@@ -1,14 +1,8 @@
 package tests;
 
 import org.openqa.selenium.By;
-import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
-import org.openqa.selenium.chrome.ChromeDriver;
-import org.openqa.selenium.chrome.ChromeOptions;
-import org.openqa.selenium.support.ui.ExpectedConditions;
-import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.Assert;
-import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
@@ -16,93 +10,63 @@ public class LoginTests extends TestBase{
 
     @BeforeMethod
     public void initTests() throws InterruptedException {
-                        //Open login window
-        waitUntilElementIsClickable(By.xpath("//*[@class='btn btn-sm btn-link text-white']"),10);
-        WebElement loginIcon = driver.findElement(By
-                    .xpath("//*[@class='btn btn-sm btn-link text-white']"));
-        loginIcon.click();
+        waitUntilHomePageIsLoad();
+        openLoginPage();
+        waitUntilLoginPageIsLoaded();
     }
 
     @Test
-    public void loginNegativeLoginEmpty() throws InterruptedException {
-           // Enter empty login and password
-        waitUntilElementIsClickable(By.id("password"),15);
-        WebElement passwordField = driver.findElement(By.id("password"));
-        passwordField.click();
-        passwordField.clear();
-        passwordField.sendKeys("pupkin");
-             //Press login button
-        waitUntilElementIsClickable(By.id("login"),10);
-        WebElement loginButton = driver.findElement(By.id("login"));
-        loginButton.click();
-        waitUntilElementIsPresent(By.id("error"),10);
-             //Print error massage
-        System.out.println("Error: " + driver
-                .findElement(By.id("error")).getText());
-        Assert.assertEquals("Missing email", driver.findElement(By.id("error")).getText(),"Missing email");
-
+    public void loginNegativeLoginEmpty() {
+        enterEmptyLoginAndPassword(PASSWORD);
+        pressLoginButton();
+        Assert.assertEquals(getErrorMessage(),"Missing email",
+                "The text of the error message is not correct");
     }
 
     @Test
-    public void loginNegativeLoginIncorrect() throws InterruptedException {
-            // Enter not existent login
-        waitUntilElementIsClickable(By.id("user"),15);
-        WebElement emailField = driver.findElement(By.id("user"));
-        emailField.click();
-        emailField.sendKeys("pupkin@mail.ru");
-
-            //Enter existent password
-        WebElement passwordField = driver.findElement(By.id("password"));
-        passwordField.click();
-        passwordField.sendKeys("pupkin");
-
-             //Press login button
-        Thread.sleep(2000);
-        WebElement loginButton = driver.findElement(By.id("login"));
-        loginButton.click();
-        waitUntilElementsAreVisible(By.id("error"),3000);
-        Thread.sleep(2000);
-
-             //Print error message
-       System.out.println("Error: "+ driver
-                .findElement(By.id("error")).getText());
-
-
+    public void loginNegativeLoginIncorrect() {
+        enterNotAtlassianLogin("878455");
+        enterNotAtlassianPassword(PASSWORD);
+        pressLoginButton();
+        Assert.assertEquals(getErrorMessage(),"There isn't an account for this username",
+                "The error message is not 'There isn't an account for this username'");
     }
+
     @Test
     public void loginNegativePasswordIncorrect() throws InterruptedException {
             // Enter email field for attlassian
-        waitUntilElementIsClickable(By.id("user"),10);
+
         WebElement emailField = driver.findElement(By.id("user"));
         emailField.click();
         emailField.clear();
         emailField.sendKeys(LOGIN);
 
              //Submit login attlassian
-        waitUntilElementIsClickable(By.id("login"),10);
-        WebElement loginAttlButton = driver.findElement(By.id("login"));
+        waitUntilElementIsClickable(By.xpath("//input[@value='Log in with Atlassian']"),10);
+        WebElement loginAttlButton = driver.findElement(By.xpath("//input[@value='Log in with Atlassian']"));
         loginAttlButton.click();
+        waitUntilElementIsClickable(By.id("password"),20);
 
              //Enter an incorrect password and submit it
-       // waitUntilElementIsClickable(By.id("password"),10);
-        Thread.sleep(5000);
+
+
         WebElement passwordAttlField = driver.findElement(By.id("password"));
         passwordAttlField.click();
         passwordAttlField.clear();
         passwordAttlField.sendKeys("46094607");
-
-        waitUntilElementIsClickable(By.id("login-submit"),10);
         driver.findElement(By.id("login-submit")).click();
-
-        Thread.sleep(2000);
-        //waitUntilElementIsPresent(By.xpath("//div[@id='login-error']"),10);
+        waitUntilElementIsVisible(By.id("login-error"),15);
         System.out.println("Error: "+ driver.findElement(By.xpath("//div[@id='login-error']")).getText());
-        Thread.sleep(3000);
+        System.out.println("Error message: " + driver
+                .findElement(By.id("login-error")).getText());
+        Assert.assertTrue(driver.findElement(By.id("login-error")).getText().contains("Incorrect email address and"),
+                "The error message is not contains the text 'Incorrect email address and'");
     }
+
     @Test
     public void loginPositive() throws InterruptedException {
                 // Enter login field for attlassian
-        waitUntilElementIsClickable(By.id("user"),15);
+
         WebElement loginField = driver.findElement(By.id("user"));
         loginField.click();
         loginField.clear();
@@ -122,10 +86,58 @@ public class LoginTests extends TestBase{
         driver.findElement(By.id("login-submit")).click();
 
         waitUntilElementIsClickable(By.xpath("//button[@data-test-id ='header-boards-menu-button']"),45);
-        //System.out.println("Boards button text: "+ driver
-              //  .findElement(By.xpath("//button[@data-test-id = 'header-boards-menu-button']")).getText());
 
-        Assert.assertTrue(driver.findElement(By.xpath("//button[@data-test-id = 'header-boards-menu-button']")).getText().equals("Boards"));
+        Assert.assertTrue(driver.findElement(By.xpath("//button[@data-test-id ='header-boards-menu-button']"))
+                .getText().equals("Boards"),"The text on the button is not 'Board'");
+    }
+
+
+    private void waitUntilLoginPageIsLoaded() {
+        waitUntilElementIsClickable(By.id("password"),15);
+        waitUntilElementIsClickable(By.id("login"),15);
+        waitUntilElementIsClickable(By.id("user"),15);
+    }
+
+    private void openLoginPage() {
+        WebElement loginIcon = driver.findElement(By
+                .xpath("//*[@class='btn btn-sm btn-link text-white']"));
+        loginIcon.click();
+    }
+
+    private void waitUntilHomePageIsLoad() {
+        waitUntilElementIsClickable(By.xpath("//*[@class='btn btn-sm btn-link text-white']"),10);
+    }
+
+    public String getErrorMessage(){
+        waitUntilElementIsInvisible(By.id("error"),10);
+        return driver.findElement(By.id("error")).getText();
+    }
+
+    private void pressLoginButton() {
+        WebElement loginButton = driver.findElement(By.id("login"));
+        loginButton.click();
+    }
+
+    private void enterEmptyLoginAndPassword(String password) {
+        WebElement passwordField = driver.findElement(By.id("password"));
+        passwordField.click();
+        passwordField.clear();
+        passwordField.sendKeys(password);
+    }
+
+    private void enterNotAtlassianPassword(String password) {
+        //Enter existent password
+        WebElement passwordField = driver.findElement(By.id("password"));
+        passwordField.click();
+        passwordField.clear();
+        passwordField.sendKeys(password);
+    }
+
+    private void enterNotAtlassianLogin(String login) {
+        WebElement emailField = driver.findElement(By.id("user"));
+        emailField.click();
+        emailField.clear();
+        emailField.sendKeys(login);
     }
 
 }
