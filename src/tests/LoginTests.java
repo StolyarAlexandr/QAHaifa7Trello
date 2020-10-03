@@ -109,7 +109,7 @@ public class LoginTests extends TestBase{
     }
 
     public String getErrorMessage(){
-        waitUntilElementIsInvisible(By.id("error"),10);
+        waitUntilElementIsVisible(By.id("error"), 10);
         return driver.findElement(By.id("error")).getText();
     }
 
