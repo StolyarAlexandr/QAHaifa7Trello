@@ -1,5 +1,6 @@
 package tests;
 
+import org.openqa.selenium.support.PageFactory;
 import org.testng.Assert;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
@@ -14,25 +15,26 @@ public class LoginTests extends TestBase {
 
     @BeforeMethod
     public void initTests() {
-        loginPage = new LoginPageHelper(driver);
-        boardsPage = new BoardsPageHelper(driver);
-        homePage = new HomePageHelper(driver);
-        homePage.waitUntilPageIsLoaded();
-        homePage.openLoginPage();
+        loginPage = PageFactory.initElements(driver, LoginPageHelper.class);
+        //loginPage = new LoginPageHelper(driver);
+        boardsPage = PageFactory.initElements(driver, BoardsPageHelper.class);
+        homePage = PageFactory.initElements(driver,HomePageHelper.class);
+        homePage.waitUntilPageIsLoaded()
+                .openLoginPage();
         loginPage.waitUntilPageIsLoaded();
     }
 
     @Test
     public void loginNegativeLoginEmpty()  {
-        loginPage.loginNotAttlassian("",PASSWORD);
-        loginPage.pressLoginButton();
+        loginPage.loginNotAttlassian("",PASSWORD)
+                .pressLoginButton();
         Assert.assertEquals(loginPage.getErrorMessage(),"Missing email",
                 "The text of the error message is not correct");
     }
 
     @Test
     public void loginNegativeLoginIncorrect()  {
-        loginPage.loginNotAttlassian("Pupkin@gmail.com",PASSWORD);
+        loginPage.loginNotAttlassian("Pupkin@gfd.ru",PASSWORD);
         Assert.assertEquals(loginPage.getErrorMessage(),"There isn't an account for this username",
                 "The error message is not 'There isn't an account for this username'");
     }
@@ -48,7 +50,7 @@ public class LoginTests extends TestBase {
     public void loginPositive()  {
         loginPage.loginAsAttlassian(LOGIN,PASSWORD);
         boardsPage.waitUntilPageIsLoaded();
-        Assert.assertTrue(loginPage.getBoadsIconName().equals("Boards"),"The text on the button is not 'Board'");
+        Assert.assertTrue(boardsPage.getBoadsIconName().equals("Boards"),"The text on the button is not 'Board'");
     }
 
 

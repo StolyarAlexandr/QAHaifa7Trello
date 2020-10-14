@@ -1,87 +1,100 @@
 package pages;
 
-import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.FindBy;
 
 public class LoginPageHelper extends PageBase{
+    @FindBy(id = "password")
+    WebElement passwordField;
+
+    @FindBy(id = "login")
+    WebElement loginButton;
+
+    @FindBy(id = "user")
+    WebElement loginField;
+
+    @FindBy(id = "error")
+    WebElement errorMessage;
+
+    @FindBy(id = "login-error")
+    WebElement errorMessageAttl;
+
+    @FindBy(xpath = "//input[@value='Log in with Atlassian']")
+    WebElement loginButtonAttl;
+
+    @FindBy(id = "login-submit")
+    WebElement loginSubmitButton;
 
     public LoginPageHelper(WebDriver driver){
         super(driver);
         this.driver = driver;
     }
 
-    public void loginAsAttlassian(String login, String password) {
+    public LoginPageHelper loginAsAttlassian(String login, String password) {
         enterLoginAsAttlassian(login);
         submitAsAttlassian();
         enterPasswordAsAttlassian(password);
+        return this;
     }
 
-    public String getBoadsIconName(){
-        return driver.findElement(By.xpath("//button[@data-test-id ='header-boards-menu-button']"))
-                .getText();
-    }
-
-    public void waitUntilPageIsLoaded() {
-        waitUntilElementIsClickable(By.id("password"),15);
-        waitUntilElementIsClickable(By.id("login"),10);
-        waitUntilElementIsClickable(By.id("user"),15);
+    public LoginPageHelper waitUntilPageIsLoaded() {
+        waitUntilElementIsClickable(passwordField,15);
+        waitUntilElementIsClickable(loginButton,10);
+        waitUntilElementIsClickable(loginField,15);
+        return this;
     }
 
     public String getErrorMessage(){
-        waitUntilElementIsVisible(By.id("error"), 15);
-        return driver.findElement(By.id("error")).getText();
+        waitUntilElementIsVisible(errorMessage, 15);
+        return errorMessage.getText();
     }
 
     public String getAttlassianErrorMessage(){
-        waitUntilElementIsVisible(By.id("login-error"), 15);
-        return driver.findElement(By.id("login-error")).getText();
+        waitUntilElementIsVisible(errorMessageAttl, 15);
+        return errorMessageAttl.getText();
     }
 
-    public void pressLoginButton() {
-        waitUntilElementIsClickable(By.id("login"),10);
-        WebElement loginButton = driver.findElement(By.id("login"));
+    public LoginPageHelper pressLoginButton() {
+        waitUntilElementIsClickable(loginButton,10);
         loginButton.click();
+        return this;
     }
 
-    public void enterNotAttlassianPassword(String password) {
-        WebElement passwordField = driver.findElement(By.id("password"));
-        passwordField.click();
-        passwordField.clear();
-        passwordField.sendKeys(password);
+    public LoginPageHelper enterNotAttlassianPassword(String password) {
+        editField(passwordField,password);
+        return this;
     }
 
-    public void enterNotAttlassianLogin(String login) {
-        WebElement loginField = driver.findElement(By.id("user"));
-        loginField.click();
-        loginField.clear();
-        loginField.sendKeys(login);
+
+    public LoginPageHelper enterNotAttlassianLogin(String login) {
+        editField(loginField,login);
+        return this;
     }
 
-    public void enterLoginAsAttlassian(String login) {
-        WebElement loginField = driver.findElement(By.id("user"));
-        loginField.click();
-        loginField.clear();
-        loginField.sendKeys(login);
+    public LoginPageHelper enterLoginAsAttlassian(String login) {
+        editField(loginField,login);
+        return this;
     }
-    public void submitAsAttlassian() {
-        waitUntilElementIsClickable(By.xpath("//input[@value='Log in with Atlassian']"),10);
-        WebElement loginAttlButton = driver.findElement(By.xpath("//input[@value='Log in with Atlassian']"));
-        loginAttlButton.click();
-        waitUntilElementIsClickable(By.id("password"),20);
+    public LoginPageHelper submitAsAttlassian() {
+        waitUntilElementIsClickable(loginButtonAttl,10);
+        loginButtonAttl.click();
+        waitUntilElementIsClickable(passwordField,20);
+        return this;
     }
-    public void enterPasswordAsAttlassian(String password) {
-        WebElement passwordAttlField = driver.findElement(By.id("password"));
-        passwordAttlField.click();
-        passwordAttlField.clear();
-        passwordAttlField.sendKeys(password);
-        driver.findElement(By.id("login-submit")).click();
+    public LoginPageHelper enterPasswordAsAttlassian(String password) {
+        editField(passwordField,password);
+        loginSubmitButton.click();
+        return this;
     }
-    public void loginNotAttlassian(String login, String password) {
+    public LoginPageHelper loginNotAttlassian(String login, String password) {
         enterNotAttlassianLogin(login);
         enterNotAttlassianPassword(password);
         pressLoginButton();
+        return this;
     }
 
-}
 
+
+
+}
