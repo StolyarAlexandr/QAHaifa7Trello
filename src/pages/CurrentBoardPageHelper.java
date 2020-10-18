@@ -38,6 +38,18 @@ public class CurrentBoardPageHelper extends PageBase{
     @FindBy(xpath = "//button[@aria-label = 'Open Member Menu']")
     WebElement menuPageIcon;
 
+    @FindBy(xpath = "//a[@class ='open-card-composer js-open-card-composer']")
+    List<WebElement> addCardButtonList;
+
+    @FindBy(css = "textarea.js-card-title")
+    WebElement cardTitleArea;
+
+    @FindBy(xpath = "//input[@type='submit'][@value = 'Add Card']")
+    WebElement submitCardButton;
+
+    @FindBy(xpath = "//a[@class = 'icon-lg icon-close dark-hover js-cancel']")
+    WebElement xCardButton;
+
     String boardName;
 
 
@@ -50,6 +62,7 @@ public class CurrentBoardPageHelper extends PageBase{
     public void waitUntilPageIsLoaded() {
         waitUntilElementIsClickable(boardsButton,15);
         waitUntilElementIsVisible(header,10);
+        waitUntilElementsAreVisible(addCardButtonList,15);
     }
 
     public String getCurrentBoardHeader(){
@@ -103,4 +116,11 @@ public class CurrentBoardPageHelper extends PageBase{
     }
 
 
+    public void addNewCardInFirstList(String title) {
+        addCardButtonList.get(0).click();
+        editField(cardTitleArea,title);
+        submitCardButton.click();
+        xCardButton.click();
+
+    }
 }

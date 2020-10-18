@@ -45,7 +45,8 @@ public class LoginPageHelper extends PageBase{
         return this;
     }
 
-    public String getErrorMessage(){
+    public String getErrorMessage()  {
+
         waitUntilElementIsVisible(errorMessage, 15);
         return errorMessage.getText();
     }
@@ -91,6 +92,7 @@ public class LoginPageHelper extends PageBase{
         enterNotAttlassianLogin(login);
         enterNotAttlassianPassword(password);
         pressLoginButton();
+
         return this;
     }
 

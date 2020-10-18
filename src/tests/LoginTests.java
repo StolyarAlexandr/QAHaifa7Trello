@@ -25,7 +25,7 @@ public class LoginTests extends TestBase {
     }
 
     @Test
-    public void loginNegativeLoginEmpty()  {
+    public void loginNegativeLoginEmpty() {
         loginPage.loginNotAttlassian("",PASSWORD)
                 .pressLoginButton();
         Assert.assertEquals(loginPage.getErrorMessage(),"Missing email",
@@ -33,9 +33,10 @@ public class LoginTests extends TestBase {
     }
 
     @Test
-    public void loginNegativeLoginIncorrect()  {
+    public void loginNegativeLoginIncorrect() {
         loginPage.loginNotAttlassian("Pupkin@gfd.ru",PASSWORD);
-        Assert.assertEquals(loginPage.getErrorMessage(),"There isn't an account for this username",
+
+        Assert.assertEquals(loginPage.getErrorMessage(),"There isn't an account for this email",
                 "The error message is not 'There isn't an account for this username'");
     }
 

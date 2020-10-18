@@ -29,6 +29,7 @@ public class PageBase {
             e.printStackTrace();
         }
     }
+
     public void waitUntilElementIsPresent(By locator, int time) {
         try {
             new WebDriverWait (driver,time).until(ExpectedConditions.presenceOfElementLocated(locator));
